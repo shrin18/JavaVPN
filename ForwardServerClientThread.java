@@ -23,6 +23,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
  
 import javax.crypto.CipherOutputStream;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 
 public class ForwardServerClientThread extends Thread
@@ -36,6 +39,11 @@ public class ForwardServerClientThread extends Thread
     private String mServerHostPort;
     private int mServerPort;
     private String mServerHost;
+    private  SecretKey originalKey;
+    private  IvParameterSpec ivParams;
+    
+    private int a;
+    private int b;
 
     /**
      * Creates a client thread for handling clients of NakovForwardServer.
@@ -43,8 +51,8 @@ public class ForwardServerClientThread extends Thread
      * A server socket is created later by run() method.
      */
     public ForwardServerClientThread(Socket aClientSocket, String serverhost, int serverport)
-    {
-        mClientSocket = aClientSocket;
+    {   
+    	mClientSocket = aClientSocket;
         mServerPort = serverport;
         mServerHost = serverhost;
     }
@@ -65,6 +73,7 @@ public class ForwardServerClientThread extends Thread
     public ServerSocket getListenSocket() {
         return mListenSocket;
     }
+   
 
     /**
      * Obtains a destination server socket to some of the servers in the list.
@@ -75,6 +84,11 @@ public class ForwardServerClientThread extends Thread
      * If there is a listen socket, first wait for incoming connection
      * on the listen socket.
      */
+    public void setSecretKey(SecretKey secretKey,IvParameterSpec iv) {
+    	this.originalKey = secretKey;
+    	this.ivParams=iv;
+    }
+ 
     public void run()
     {
         try {
@@ -84,10 +98,11 @@ public class ForwardServerClientThread extends Thread
                mClientSocket = mListenSocket.accept();
                mClientHostPort = mClientSocket.getInetAddress().getHostAddress() + ":" + mClientSocket.getPort();
                Logger.log("Accepted from  " + mServerPort + " <--> " + mClientHostPort + "  started.");
-               
+               a=1;
            }
            else {
                mClientHostPort = mClientSocket.getInetAddress().getHostAddress() + ":" + mClientSocket.getPort();
+               b=1;
            }
 
            try {
@@ -109,13 +124,26 @@ public class ForwardServerClientThread extends Thread
            Logger.log("TCP Forwarding  " + mClientHostPort + " <--> " + mServerHostPort + "  started.");
  
            // Start forwarding of socket data between server and client
-           ForwardThread clientForward = new ForwardThread(this, clientIn, serverOut);
-           ForwardThread serverForward = new ForwardThread(this, serverIn, clientOut);
-           mBothConnectionsAreAlive = true;
-           clientForward.start();
-           serverForward.start();
- 
-        } catch (IOException ioe) {
+       if(a==1)
+        {ForwardThread clientForward = new ForwardThread(this, clientIn, serverOut, "2");   
+         ForwardThread serverForward = new ForwardThread(this, serverIn, clientOut, "1");
+         mBothConnectionsAreAlive = true;
+         clientForward.setSecretKey(originalKey,ivParams);
+         serverForward.setSecretKey(originalKey,ivParams);
+         clientForward.start();
+         serverForward.start();}
+       else if(b==1)
+       {ForwardThread clientForward = new ForwardThread(this, clientIn, serverOut,"1");   
+       ForwardThread serverForward = new ForwardThread(this, serverIn, clientOut, "2");
+       mBothConnectionsAreAlive = true;
+       clientForward.setSecretKey(originalKey,ivParams);
+       serverForward.setSecretKey(originalKey,ivParams);
+       clientForward.start();
+       serverForward.start(); 	   
+       }
+                 
+        }catch (IOException ioe) 
+           {
            ioe.printStackTrace();
         }
     }

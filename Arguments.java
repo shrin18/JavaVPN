@@ -7,7 +7,12 @@ import java.util.Properties;
  */
 
 public class Arguments extends Properties {
-    public void setDefault(String arg, String value) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public void setDefault(String arg, String value) {
         this.setProperty(arg, value);
     }
     public void loadArguments(String args[]) throws IllegalArgumentException {
@@ -29,4 +34,3 @@ public class Arguments extends Properties {
         return this.getProperty(arg);
     }
 }
-

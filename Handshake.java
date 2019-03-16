@@ -7,5 +7,5 @@ public class Handshake {
 
     /* The final destination */
     public static String targetHost = "localhost";
-    public static int targetPort = 6789;
+    public static int targetPort = 6768;
 }
