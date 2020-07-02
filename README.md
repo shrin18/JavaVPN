@@ -1,7 +1,33 @@
-# VPN_Project
-VPN_Project (using Java Cryptography Architecture for Testing)
-VPN Java Project in the Period 2 at KTH. This was an individual project and it tested all the concepts that we studied in the course. It made extensive use of Java and several libraries from the Internet Security domain which we imported in the program. Basically, it was a VPN Java based project of Server Side to Client-Side implementation. The project was done entirely in Java language with the help of Eclipse IDE. It involved the concepts in Java Socket Plumbing and Nakov Forward Server. The Messages that were sent across the tunnel were encrypted via an end-to-end encryption using Base 64 Encoding and Decoding. This encryption was done using RSA-keys and generating certificates with the Signatures of Server-Side User and Client-Side user or the CA. The project was divided in two parts.
---> Handshaking Phase where the Server Side and Client side performed Handshaking by exchanging each other’s certificates, which were generated using the respective keys and then verifying them as per pre-defined norms. This was done via the use of a function in the Main Method of the program namely ‘Verify Certificate’.
---> After this, a secure connection was established between the server and the client using Encryption and Decryption techniques. In short, an IPSec tunnel was created between the Server and the Client. The certificates were Encoded using Base64 encoding and Decoding. Server sockets and Client socket ports were used for listening to the data that was sent, as per the requirement.
- 
-The Communication Stacks used were TCP/IP stack consisting of TCP/IP software, sockets software (Winsock.dynamic link library), and hardware driver software (packet drivers). For testing of Communication, i.e. connection on Some random TCP port, Ncat was used on Linux.
+# VPN Project - KTH
+
+This is a course project for KTH based on the Nakov Forward Server.
+</br>
+It uses Java Cryptographyic libraries (JCA) Framework from Oracle
+
+## Installation
+
+Use the src folder to extract all the java files
+
+```bash
+git clone <project name.git>
+cd src
+```
+
+## Usage
+
+```python
+import java.net.ServerSocket
+import java.util.*
+import javax.crypto.*
+import java.net.*
+import java.security.*
+import java.nio.*
+```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+This project does not use any license currently.
