@@ -20,3 +20,19 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+out
+server
+node_modules
+*.vsix
+.DS_Store
+.vscode-test
+undefined
+target
+dist
+bin/
+.settings
+.classpath
+.project
+test/resources/projects/**/.vscode
+test/resources/projects/maven/salut/testGradle
